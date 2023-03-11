@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SE2_Einzelbeispiel</string>
+    <string name="send">Abschicken</string>
+    <string name="answer">Antwort des Servers</string>
+    <string name="inputId">Gib deine Matrikelnummer ein:</string>
+    <string name="inputHint">Matrikelnummer</string>
+</resources>
