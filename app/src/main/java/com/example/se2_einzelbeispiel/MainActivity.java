@@ -23,23 +23,64 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = findViewById(R.id.button_send);
-        button.setOnClickListener(new View.OnClickListener() {
+        EditText editTextInput = findViewById(R.id.editText_input);
+        TextView textView = findViewById(R.id.textView_answer);
+        Button sendButton = findViewById(R.id.button_send);
+        Button calcButton = findViewById(R.id.button_calc);
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText editTextInput = findViewById(R.id.editText_input);
-                new tcpConnection(editTextInput.getText().toString()).execute();
+                new TcpConnection(editTextInput.getText().toString()).execute();
+            }
+        });
+        calcButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String output;
+                if (editTextInput.getText().length() == 8) {
+                    output = filterPrimeNumbers(editTextInput.getText().toString());
+                } else {
+                    output = "Die Matrikelnummer muss 8 Zahlen beinhalten.";
+                }
+                textView.setText(output);
             }
         });
     }
-    public class tcpConnection extends AsyncTask<Void, Void, String> {
+
+    public String filterPrimeNumbers(String numbers) {
+        String result = "";
+        for (int i = 0; i < numbers.length(); i++) {
+            int number = Integer.parseInt(numbers.substring(i, i + 1));
+            if (isPrimeNumber(number)) {
+                result += number;
+            }
+        }
+        if (result.length() == 0) {
+            result = "Die Matrikelnummer beinhaltet keine Primzahlen.";
+        }
+        return result;
+    }
+
+    public boolean isPrimeNumber(int number) {
+        boolean result = true;
+        if (number <= 1) {
+            result = false;
+        }
+        for (int i = 2; i < number; i++) {
+            if (number % i == 0) {
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    public class TcpConnection extends AsyncTask<Void, Void, String> {
 
         private final String host = "se2-isys.aau.at";
         private final int port = 53212;
-
         private String input;
 
-        public tcpConnection(String input) {
+        public TcpConnection(String input) {
             this.input = input;
         }
 
@@ -68,7 +109,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-
-
-
